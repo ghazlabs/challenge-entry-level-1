@@ -47,4 +47,4 @@ Setelah menyelesaikan challenge:
 
 1. Pastikan seluruh perubahan sudah ada di repository hasil fork.
 2. Pastikan README.md berisi link demo online game.
-3. Submit hasil challenge melalui [formulir ini](https://forms.gle/EuAQsdKS5j5MGTvx7).
+3. Submit hasil challenge melalui [formulir ini](https://forms.gle/XmHimuE41db77TBS9).
