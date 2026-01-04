@@ -1,0 +1,5 @@
+dino.achievagemilang.live {
+    reverse_proxy /api/* backend:8080
+    reverse_proxy /ws backend:8080
+    reverse_proxy * frontend:3000
+}
