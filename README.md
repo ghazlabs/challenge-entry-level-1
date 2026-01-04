@@ -2,6 +2,8 @@
 
 A realtime 1v1 competitive Chrome Dino clone built with modern technologies.
 
+### 🔴 **Live Demo:** [dino.achievagemilang.live](https://dino.achievagemilang.live)
+
 ## Tech Stack
 
 - **Frontend**: Next.js 16, TypeScript, Tailwind CSS, shadcn/ui, HTML5 Canvas
