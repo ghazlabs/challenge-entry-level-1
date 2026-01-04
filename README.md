@@ -1,50 +1,106 @@
-# Challenge Entry Level 1 - Chrome Dino Multiplayer
+# 🦖 Dino Game
 
-Chrome Dino Multiplayer adalah challenge untuk membuat clone dari game Chrome Dino (chrome://dino) dengan twist realtime multiplayer.
+A realtime 1v1 competitive Chrome Dino clone built with modern technologies.
 
-Game yang kamu buat harus bisa dimainkan oleh maksimal 2 pemain secara bersamaan dalam satu sesi. Game juga wajib memiliki fitur leaderboard global untuk mencatat pemain dengan skor tertinggi dari seluruh sesi permainan.
+### 🔴 **Live Demo:** [dino.achievagemilang.live](https://dino.achievagemilang.live)
 
-Challenge ini boleh dikerjakan secara individu atau berkelompok dengan maksimal 3 orang dalam satu tim. Seluruh mekanisme permainan diserahkan sepenuhnya ke kreativitasmu.
+## Tech Stack
 
-## Deskripsi Challenge
+- **Frontend**: Next.js 16, TypeScript, Tailwind CSS, shadcn/ui, HTML5 Canvas
+- **Backend**: Go (Golang), Gorilla WebSocket, net/http
+- **Database**: PostgreSQL (Leaderboard), Redis (Matchmaking Queue)
+- **Sync Strategy**: Deterministic Lockstep (Server sends Seed → identical obstacles on both clients)
 
-Pada challenge ini, kamu diminta untuk:
-- Fork repository challenge ini sebagai langkah awal.
-- Membuat game berbasis web yang terinspirasi dari Chrome Dino.
-- Menambahkan fitur realtime multiplayer untuk maksimal 2 pemain.
-- Menyediakan fitur leaderboard global berbasis skor.
-- Menyediakan versi demo game yang bisa diakses secara online.
+## Quick Start (Docker)
 
-Kamu bebas menentukan:
-- Aturan permainan.
-- Cara pemain berinteraksi (kompetitif atau kooperatif).
-- Sistem penilaian dan perhitungan skor.
-- Tampilan dan gaya visual game.
+The entire application (Frontend, Backend, Database, Cache) is containerized for easy setup.
 
-## Ketentuan Umum
+### Prerequisites
 
-1. Peserta wajib melakukan fork repository ini.
-2. Challenge boleh dikerjakan secara individu atau tim dengan maksimal 3 orang.
-3. Game harus berbasis web.
-4. Game harus mendukung realtime multiplayer untuk maksimal 2 pemain.
-5. Game harus memiliki fitur leaderboard global berbasis skor.
-6. Game harus bisa dimainkan melalui browser tanpa instalasi tambahan.
-7. Wajib menyediakan link demo online yang bisa diakses oleh reviewer.
-8. Source code harus tersedia dalam repository hasil fork.
+- Docker & Docker Compose
 
-## Yang Dinilai
+### 1. Start the Application
 
-1. Fungsionalitas realtime multiplayer.
-2. Implementasi leaderboard global dan sistem skor.
-3. Stabilitas game saat dimainkan oleh 2 pemain.
-4. Kreativitas dalam mengembangkan mekanisme permainan.
-5. UI/UX dan pengalaman bermain secara keseluruhan.
-6. Kerapian struktur kode dan dokumentasi.
+```bash
+docker-compose up --build
+```
 
-## Pengumpulan
+_This handles database migrations, backend compilation, and frontend building automatically._
 
-Setelah menyelesaikan challenge:
+### 2. Access the Game
 
-1. Pastikan seluruh perubahan sudah ada di repository hasil fork.
-2. Pastikan README.md berisi link demo online game.
-3. Submit hasil challenge melalui [formulir ini](https://forms.gle/XmHimuE41db77TBS9).
+- **Frontend (Game Client)**: http://localhost:3000
+- **Backend (API)**: http://localhost:8080
+
+### 3. Stop the Application
+
+```bash
+docker-compose down
+```
+
+---
+
+## How to Play
+
+### Controls
+
+| Action        | Desktop                 | Mobile                            |
+| ------------- | ----------------------- | --------------------------------- |
+| **Jump**      | `Space` or `↑`          | Tap **Top Half** of screen        |
+| **Duck**      | `↓`                     | Tap **Bottom Half** of screen     |
+| **Fast Fall** | Press `↓` while jumping | Tap **Bottom Half** while jumping |
+
+### Game Rules
+
+1. Open http://localhost:3000 in **two browser tabs/windows** (or use a mobile device on the same network)
+2. Enter your name and click "Find Match"
+3. Wait for matchmaking to pair you
+4. Survive longer than your opponent to win!
+5. **Early Leave**: If you die first, you can leave immediately to find a new game.
+
+## Key Features
+
+- **Multiplayer 1v1**: Realtime competition with synchronized obstacles
+- **Smooth Gameplay**:
+  - **Fast Fall**: Press down mid-air to drop quickly
+  - **Smart Hitboxes**: Forgiving collision detection for better game feel
+  - **Responsive Canvas**: Optimized for both desktop and mobile screens
+- **Fairness & Security**:
+  - **Deterministic RNG**: Identical obstacles for both players
+  - **Anti-Cheat**: Server validates score jumps and rejects suspicious updates
+- **Leaderboard**: Global high scores saved to PostgreSQL (Paginated)
+
+## Project Structure
+
+```
+dino-multiplayer/
+├── backend/                 # Go Backend
+│   ├── cmd/server/          # Entry point
+│   └── internal/
+│       ├── db/              # PostgreSQL & Redis
+│       ├── game/            # Matchmaking logic
+│       └── ws/              # WebSocket handlers
+├── frontend/                # Next.js Frontend
+│   └── src/
+│       ├── app/             # Pages (lobby, game, leaderboard)
+│       ├── components/      # UI Components
+│       └── lib/             # Game engine & utilities
+├── docker-compose.yml       # Orchestration
+└── Dockerfile               # (In respective dirs)
+```
+
+## Communication Protocol
+
+### Client → Server
+
+- `JOIN_QUEUE` - Join matchmaking queue
+- `UPDATE_SCORE` - Send score updates
+- `PLAYER_DIED` - Notify death
+- `LEAVE_GAME` - Gracefully exit active game (after death)
+
+### Server → Client
+
+- `GAME_START` - Match found with seed
+- `OPPONENT_UPDATE` - Opponent score/status
+- `OPPONENT_LEFT` - Opponent disconnected/left
+- `GAME_OVER` - Winner announcement
