@@ -45,6 +45,7 @@ const DINO_HEIGHT = 50;
 const DINO_DUCK_HEIGHT = 25;
 const GRAVITY = 0.6;
 const JUMP_FORCE = -12;
+const FAST_FALL_FORCE = 20;
 
 // Fixed obstacle dimensions for consistent, beatable gameplay
 const CACTUS_WIDTH = 25;
@@ -107,10 +108,8 @@ export default function GameCanvas({
 
     if (isDucking) {
       if (state.isJumping) {
-        // Fast fall: instantly bring dino to ground and duck
-        state.dinoY = 0;
-        state.dinoVelocity = 0;
-        state.isJumping = false;
+        // Fast fall: apply strong downward velocity
+        state.dinoVelocity = FAST_FALL_FORCE;
         state.isDucking = true;
       } else {
         state.isDucking = true;
