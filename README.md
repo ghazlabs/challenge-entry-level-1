@@ -9,38 +9,34 @@ A realtime 1v1 competitive Chrome Dino clone built with modern technologies.
 - **Database**: PostgreSQL (Leaderboard), Redis (Matchmaking Queue)
 - **Sync Strategy**: Deterministic Lockstep (Server sends Seed → identical obstacles on both clients)
 
-## Quick Start
+## Quick Start (Docker)
+
+The entire application (Frontend, Backend, Database, Cache) is containerized for easy setup.
 
 ### Prerequisites
 
 - Docker & Docker Compose
-- Node.js 18+
-- Go 1.21+
 
-### 1. Start Infrastructure
+### 1. Start the Application
 
 ```bash
-docker-compose up -d postgres redis
+docker-compose up --build
 ```
 
-### 2. Start Backend
+_This handles database migrations, backend compilation, and frontend building automatically._
+
+### 2. Access the Game
+
+- **Frontend (Game Client)**: http://localhost:3000
+- **Backend (API)**: http://localhost:8080
+
+### 3. Stop the Application
 
 ```bash
-cd backend
-go run ./cmd/server
+docker-compose down
 ```
 
-Server runs on http://localhost:8080
-
-### 3. Start Frontend
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-Frontend runs on http://localhost:3000
+---
 
 ## How to Play
 
@@ -87,7 +83,8 @@ dino-multiplayer/
 │       ├── app/             # Pages (lobby, game, leaderboard)
 │       ├── components/      # UI Components
 │       └── lib/             # Game engine & utilities
-└── docker-compose.yml
+├── docker-compose.yml       # Orchestration
+└── Dockerfile               # (In respective dirs)
 ```
 
 ## Communication Protocol
