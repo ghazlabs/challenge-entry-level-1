@@ -162,17 +162,23 @@ export default function LobbyPage() {
         <Card className='mt-4 bg-gray-800/30 border-gray-700/50'>
           <CardContent className='pt-4'>
             <h3 className='text-gray-300 font-semibold mb-2'>How to Play</h3>
-            <ul className='text-gray-400 text-sm space-y-1'>
-              <li>
+            <div className='text-gray-400 text-sm space-y-1'>
+              <p>
                 ⬆️ <strong>Space / Up Arrow</strong> - Jump
-              </li>
-              <li>
+              </p>
+              <p>
                 ⬇️ <strong>Down Arrow</strong> - Duck
-              </li>
-              <li>
-                📱 <strong>Tap</strong> - Jump (mobile)
-              </li>
-            </ul>
+              </p>
+              <p>
+                ⚡ <strong>Down while jumping</strong> - Fast Fall
+              </p>
+            </div>
+            <div className='mt-3 pt-3 border-t border-gray-700/50 text-gray-500 text-xs'>
+              <p className='mb-1'>
+                📱 <strong>Mobile Controls:</strong>
+              </p>
+              <p>Tap top half = Jump • Tap bottom half = Duck</p>
+            </div>
           </CardContent>
         </Card>
 
