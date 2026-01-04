@@ -104,8 +104,20 @@ export default function GameCanvas({
 
   const duck = useCallback((isDucking: boolean) => {
     const state = gameStateRef.current;
-    if (!state.isJumping && !state.gameOver) {
-      state.isDucking = isDucking;
+    if (state.gameOver) return;
+
+    if (isDucking) {
+      if (state.isJumping) {
+        // Fast fall: instantly bring dino to ground and duck
+        state.dinoY = 0;
+        state.dinoVelocity = 0;
+        state.isJumping = false;
+        state.isDucking = true;
+      } else {
+        state.isDucking = true;
+      }
+    } else {
+      state.isDucking = false;
     }
   }, []);
 
@@ -362,13 +374,40 @@ export default function GameCanvas({
     };
   }, [isRunning, onScoreUpdate, onGameOver]);
 
+  const handleTouchStart = useCallback(
+    (e: React.TouchEvent<HTMLCanvasElement>) => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+
+      const touch = e.touches[0];
+      const rect = canvas.getBoundingClientRect();
+      const y = touch.clientY - rect.top;
+      const isBottomHalf = y > rect.height / 2;
+
+      if (isBottomHalf) {
+        // Tap on bottom half = duck
+        duck(true);
+      } else {
+        // Tap on top half = jump
+        jump();
+      }
+    },
+    [jump, duck]
+  );
+
+  const handleTouchEnd = useCallback(() => {
+    duck(false);
+  }, [duck]);
+
   return (
     <canvas
       ref={canvasRef}
       width={CANVAS_WIDTH}
       height={CANVAS_HEIGHT}
-      className='bg-gray-900 rounded-lg border border-gray-700'
+      className='bg-gray-900 rounded-lg border border-gray-700 touch-none'
       onClick={jump}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     />
   );
 }

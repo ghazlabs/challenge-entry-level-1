@@ -190,9 +190,18 @@ export default function GamePage() {
 
       {/* Controls Info */}
       {!gameOver && isPlaying && (
-        <div className='mt-4 text-gray-500 text-sm'>
-          Press <span className='text-white'>SPACE</span> or{' '}
-          <span className='text-white'>↑</span> to jump
+        <div className='mt-4 text-center'>
+          {/* Desktop Controls */}
+          <div className='text-gray-500 text-sm mb-2'>
+            <span className='text-white'>⬆️ SPACE / ↑</span> Jump •{' '}
+            <span className='text-white'>⬇️ ↓</span> Duck •{' '}
+            <span className='text-white'>↓ while jumping</span> Fast Fall
+          </div>
+          {/* Mobile Controls */}
+          <div className='text-gray-600 text-xs'>
+            📱 Mobile: <span className='text-gray-400'>Tap top half</span> =
+            Jump • <span className='text-gray-400'>Tap bottom half</span> = Duck
+          </div>
         </div>
       )}
 
